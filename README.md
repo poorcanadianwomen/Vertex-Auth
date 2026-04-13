@@ -56,14 +56,6 @@ Vertex Auth is a dedicated Two-Factor Authentication (2FA) app built specificall
 
 ---
 
-## 📥 Installation
-
-**Coming Soon.** 
-
-Once the first version is ready, you will be able to download the APK directly from the **[Releases](https://github.com/poorcanadianwomen/Vertex-Auth/releases)** section of this repository.
-
----
-
 ## ⚠️ Disclaimer & Legal
 
 *   **Third-Party Tool:** Vertex Auth is a tool and is **Officially** with [VertexSender](https://www.vertexsender.com/).
