@@ -1,155 +1,755 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Uncle Joe's Christian Corner</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertex Auth - Secure 2FA for VertexSender</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
-            background-color: #008080;
-            font-family: Tahoma, Geneva, sans-serif;
-            color: black;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
         }
-        h1, h2 {
-            color: #000080; 
-            text-align: center;
+        
+        body {
+            background-color: #f9fafb;
+            color: #1f2937;
+            overflow-x: hidden;
+            line-height: 1.6;
         }
-        .window {
-            background-color: #C0C0C0;
-            border: 2px solid #808080;
-            width: 80%;
-            max-width: 800px;
-            margin: 20px auto;
-            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
-            font-size: 14px;
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
-        .window-header {
-            background-color: #000080;
-            color: white;
-            padding: 5px;
-            font-weight: bold;
+        
+        /* Header */
+        header {
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: rgba(249, 250, 251, 0.98);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #808080;
-            box-sizing: border-box;
         }
-        .window-header span {
-            margin-left: 5px;
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-        .window-header button {
-            background-color: #C0C0C0;
-            border: 1px solid #808080;
-            width: 20px;
-            height: 20px;
+        
+        .logo-icon {
+            font-size: 28px;
+            color: #059669;
+        }
+        
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: #059669;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+        
+        .nav-links a {
+            color: #4b5563;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 15px;
+        }
+        
+        .nav-links a:hover {
+            color: #059669;
+        }
+        
+        .github-btn {
+            background: #059669;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s;
+            font-size: 15px;
+        }
+        
+        .github-btn:hover {
+            background: #047857;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 140px 0 80px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .hero-content {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+        }
+        
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #111827;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            font-size: 20px;
+            color: #4b5563;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        
+        .vertexsender-highlight {
+            color: #059669;
+            font-weight: 600;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .cta-primary {
+            background: #059669;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .cta-primary:hover {
+            background: #047857;
+        }
+        
+        .cta-secondary {
+            background: white;
+            color: #374151;
+            padding: 14px 28px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            border: 1px solid #d1d5db;
+        }
+        
+        .cta-secondary:hover {
+            border-color: #9ca3af;
+            background: #f9fafb;
+        }
+        
+        /* Phone Image */
+        .phone-image {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .phone {
+            width: 300px;
+            height: 600px;
+            background: white;
+            border-radius: 40px;
+            border: 4px solid #e5e7eb;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+        }
+        
+        .screen {
+            position: absolute;
+            top: 20px;
+            left: 10px;
+            right: 10px;
+            bottom: 20px;
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+        }
+        
+        .status-bar {
+            height: 50px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .status-time {
+            font-weight: 600;
+            color: #111827;
+        }
+        
+        .status-icons {
+            display: flex;
+            gap: 10px;
+            color: #111827;
+        }
+        
+        .app-header {
+            padding: 20px;
             text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .app-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 5px;
+        }
+        
+        .app-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        .account-section {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .account-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .account-name {
+            font-weight: 600;
+            color: #111827;
+        }
+        
+        .account-menu {
+            color: #059669;
+        }
+        
+        .token-container {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .token-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+        
+        .token-value {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 8px;
+            color: #059669;
+            font-family: monospace;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .token-timer {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+        
+        .timer-progress {
+            flex-grow: 1;
+            height: 3px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .timer-progress-inner {
+            height: 100%;
+            background: #059669;
+            width: 70%;
+        }
+        
+        .actions {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px;
+            color: #374151;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            transition: background-color 0.3s;
             cursor: pointer;
         }
-        .window-content {
-            padding: 15px;
+        
+        .action-btn:hover {
+            background: #059669;
+            color: white;
         }
-        nav {
-            background-color: #C0C0C0;
-            border-top: 2px solid #808080;
-            padding: 5px 0;
-            display: flex;
-            justify-content: space-around;
+        
+        .action-icon {
+            font-size: 20px;
         }
-        nav a {
-            color: black;
-            text-decoration: none;
-            padding: 5px 15px;
-            border: 1px solid #808080;
-            background-color: #E0E0E0;
-            box-shadow: 2px 2px 0px #ffffff;
+        
+        .action-text {
+            font-size: 12px;
         }
-        nav a:hover {
-            background-color: #D0D0D0;
+        
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background: white;
         }
-        .project-card {
-            background-color: #E0E0E0;
-            border: 2px solid #808080;
-            padding: 15px;
-            margin: 15px;
-            width: 45%;
-            display: inline-block;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-            vertical-align: top;
-        }
-        img {
-            border: 1px solid #808080;
-            margin-bottom: 10px;
-            width: 100%;
-        }
-        footer {
-            background-color: #C0C0C0;
-            border-top: 2px solid #808080;
+        
+        .section-title {
             text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+            font-size: 36px;
+            margin-bottom: 60px;
+            font-weight: 700;
+            color: #111827;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: #059669;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        
+        .feature-icon i {
+            font-size: 24px;
+            color: white;
+        }
+        
+        .feature-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #111827;
+        }
+        
+        .feature-desc {
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        
+        /* Integration Section */
+        .integration {
+            padding: 80px 0;
+            text-align: center;
+            background: #f9fafb;
+        }
+        
+        .integration-steps {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+        
+        .step {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            width: 250px;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+            position: relative;
+        }
+        
+        .step-number {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            background: #059669;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .step-icon {
+            font-size: 32px;
+            color: #059669;
+            margin-bottom: 15px;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 60px 0 40px;
+            text-align: center;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: #4b5563;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 15px;
+        }
+        
+        .footer-links a:hover {
+            color: #059669;
+        }
+        
+        .copyright {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .vertex-link {
+            color: #059669;
+            text-decoration: none;
+        }
+        
+        .vertex-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Simple animation for code */
+        @keyframes subtleChange {
+            0% { opacity: 0.9; }
+            50% { opacity: 1; }
+            100% { opacity: 0.9; }
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .code-animation {
+            animation: subtleChange 10s infinite;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
+            
+            .subtitle {
+                font-size: 18px;
+            }
+            
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .phone {
+                width: 250px;
+                height: 500px;
+            }
+            
+            .integration-steps {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .section-title {
+                font-size: 28px;
+            }
+            
+            .token-value {
+                font-size: 28px;
+                letter-spacing: 6px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Background Music (using local audio file) -->
-    <audio autoplay loop>
-        <source src="000B000D.mp3" type="audio/mpeg"> <!-- Use the correct file path here -->
-        Your browser does not support the audio element.
-    </audio>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <div class="logo-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="logo-text">Vertex Auth</div>
+                </div>
+                <div class="nav-links">
+                    <a href="#">GitHub</a>
+                    <a href="#">Support</a>
+                </div>
+                <a href="#" class="github-btn">
+                    <i class="fab fa-github"></i>
+                    View on GitHub
+                </a>
+            </nav>
+        </div>
+    </header>
 
-    <!-- Home Section -->
-    <div class="window">
-        <div class="window-header">
-            <span>Uncle Joe</span>
-            <button>X</button>
-        </div>
-        <div class="window-content">
-            <h1>Welcome to my awesome sauce website</h1>
-            <p>Shout out to QuantumMapleQC for making this website! This website is related to my projects that im working on.</p>
-        </div>
-    </div>
-
-    <!-- Introduction Section -->
-    <div class="window" id="intro">
-        <div class="window-header">
-            <span>Introduction</span>
-            <button>X</button>
-        </div>
-        <div class="window-content">
-            <p><b>Uncle Joe is a cool person</b>
-            <p><i>always pray before going to sleep it always strengthen your faith and trust in God</i></p>
-        </div>
-    </div>
-
-    <!-- Projects Section -->
-    <div class="window" id="projects">
-        <div class="window-header">
-            <span>Projects</span>
-            <button>X</button>
-        </div>
-        <div class="window-content">
-            <h2>Faith-Based Projects</h2>
-            <div class="project-card">
-                <h3>Blood Debts</h3>
-                <img src="Blood_Debts_logo.png" alt="Project 1">
-                <p></p>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="fade-in">Two-Factor Authentication for <span class="vertexsender-highlight">VertexSender</span></h1>
+            <p class="subtitle fade-in">Open-source 2FA solution that adds an extra layer of security to your VertexSender account with time-based one-time passwords. Download directly from GitHub Releases.</p>
+            <div class="cta-buttons">
+                <a href="#" class="cta-primary fade-in">
+                    <i class="fab fa-github"></i>
+                    Download from GitHub
+                </a>
+                <a href="#" class="cta-secondary fade-in">
+                    <i class="fas fa-book"></i>
+                    Documentation
+                </a>
             </div>
         </div>
-    </div>
+        
+        <!-- Phone -->
+        <div class="phone-image fade-in">
+            <div class="phone">
+                <div class="screen">
+                    <div class="status-bar">
+                        <div class="status-time">03:14</div>
+                        <div class="status-icons">
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="account-section">
+                        <div class="account-header">
+                            <div class="account-name">annonymous</div>
+                            <div class="account-menu"><i class="fas fa-ellipsis-h"></i></div>
+                        </div>
+                        
+                        <div class="token-container">
+                            <div class="token-label">CURRENT CODE</div>
+                            <div class="token-value code-animation">479831</div>
+                            <div class="token-timer">
+                                <i class="fas fa-sync-alt"></i>
+                                <div class="timer-progress">
+                                    <div class="timer-progress-inner"></div>
+                                </div>
+                                <span>27s</span>
+                            </div>
+    </section>
 
-    <!-- Bible Verse Section -->
-    <div class="window" id="verse">
-        <div class="window-header">
-            <span>Today's Bible Verse</span>
-            <button>X</button>
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Why Vertex Auth?</h2>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3 class="feature-title">Enhanced Security</h3>
+                    <p class="feature-desc">Your account wont be in danger from hackers and skids!</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Open Source</h3>
+                    <p class="feature-desc"> Its on github so it should be free to use and free to fork pretty much :3 </p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="feature-title">Lightweight</h3>
+                    <p class="feature-desc">UI Interface is so lightweight that you can use this app on a toaster!</p>
+                </div>
+            </div>
         </div>
-        <div class="window-content">
-            <p><i>"I can do all things through Christ who strengthens me." – Philippians 4:13</i></p>
+    </section>
+
+    <!-- Integration Section -->
+    <section class="integration">
+        <div class="container">
+            <h2 class="section-title">Simple Setup Process</h2>
+            <p class="subtitle">Get started with Vertex Auth in just three simple steps</p>
+            
+            <div class="integration-steps">
+                <div class="step fade-in">
+                    <div class="step-number">1</div>
+                    <div class="step-icon"><i class="fab fa-github"></i></div>
+                    <h3>Download APK</h3>
+                    <p>Get the latest release from our GitHub releases page</p>
+                </div>
+                
+                <div class="step fade-in">
+                    <div class="step-number">2</div>
+                    <div class="step-icon"><i class="fas fa-qrcode"></i></div>
+                    <h3>Scan QR Code</h3>
+                    <p>In your account settings, scan the QR code and wait...</p>
+                </div>
+                
+                <div class="step fade-in">
+                    <div class="step-number">3</div>
+                    <div class="step-icon"><i class="fas fa-check-circle"></i></div>
+                    <h3>You're Protected</h3>
+                    <p>Enter the code and your done! </p>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="https://opensource.org/">License</a>
+                <a href="#">GitHub</a>
+                <a href="https://www.vertexsender.com/terms">Terms of Service
+                </a>
+                <a href="https://www.vertexsender.com/contact">Contact</a>
+            </div>
+            <p class="copyright">© 2023 Vertex Auth. Open source project designed for <a href="https://vertexsender.com" class="vertex-link">VertexSender.com</a></p>
+        </div>
+    </footer>
 
+    <script>
+        // Simple fade-in animation on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            fadeElements.forEach(element => {
+                fadeInObserver.observe(element);
+            });
+            
+            // Simulate changing code and timer
+            const codeElement = document.querySelector('.token-value');
+            const timerElement = document.querySelector('.token-timer span');
+            const progressElement = document.querySelector('.timer-progress-inner');
+            const codes = ['479831', '142567', '893421', '356982'];
+            let currentCode = 0;
+            let seconds = 27;
+            
+            setInterval(() => {
+                seconds--;
+                
+                if (seconds <= 0) {
+                    seconds = 30;
+                    currentCode = (currentCode + 1) % codes.length;
+                    codeElement.textContent = codes[currentCode];
+                }
+                
+                timerElement.textContent = seconds + 's';
+                progressElement.style.width = ((seconds / 30) * 100) + '%';
+            }, 1000);
+        });
+    </script>
 </body>
 </html>
